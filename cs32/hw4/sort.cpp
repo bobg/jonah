@@ -278,7 +278,7 @@ void sortUsingPtrs(vector<Student>& students, bool comp(const Student*, const St
 
     vector<Student*> v;
     for (int i = 0; i < auxStudents.size(); i++) {
-        v.push_back(&students[i]);
+        v.push_back(&auxStudents[i]);
     }
 
     // TODO:  Sort the vector of pointers using the STL sort algorithm
@@ -291,7 +291,7 @@ void sortUsingPtrs(vector<Student>& students, bool comp(const Student*, const St
     //        order.
 
     for (int i = 0; i < auxStudents.size(); i++) {
-        auxStudents[i] = *v[i];
+        students[i] = *v[i];
     }
 
     // auxStudents will be destroyed upon return from the function
