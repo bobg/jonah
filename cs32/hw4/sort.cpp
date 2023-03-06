@@ -284,7 +284,7 @@ void sortUsingPtrs(vector<Student>& students, bool comp(const Student*, const St
     // TODO:  Sort the vector of pointers using the STL sort algorithm
     //        with the comp parameter as the ordering relationship.
 
-    insertion_sort<Student*>(v, compareStudentPtr);
+    insertion_sort<Student*>(v, comp);
 
     // TODO:  Using the now-sorted vector of pointers, replace each Student
     //        in students with the Students from auxStudents in the correct
