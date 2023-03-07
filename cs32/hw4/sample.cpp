@@ -11,7 +11,7 @@ void frobFirst(vector<T>& v, void frob(T&)) {
 }
 
 void frobItem(Item& item) {}
-void frobItemPtr(Item* item) {}
+void frobItemPtr(Item*& item) {}
 
 int main() {
   vector<Item> v;
