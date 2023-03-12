@@ -20,7 +20,7 @@ using namespace std;
 
 
   // If your program is having trouble finding these files. replace the
-  // string literals with full path names to the files.  Also, for test
+  // string literals with full path names to the files.	 Also, for test
   // purposes, you may want to create some small, simple user and movie
   // data files to makde debuggiing easier, so you can replace the string
   // literals with the names of those smaller files.
@@ -37,7 +37,7 @@ int main()
 		return 1;
 	}
 	MovieDatabase mdb;
-	if (!mdb.load(MOVIE_DATAFILE))  // In skeleton, load always return false
+	if (!mdb.load(MOVIE_DATAFILE))	// In skeleton, load always return false
 	{
 		cout << "Failed to load user data file " << MOVIE_DATAFILE << "!" << endl;
 		return 1;
@@ -47,19 +47,20 @@ int main()
 	{
 		cout << "Enter user email address (or quit): ";
 		string email;
-		getline(cin, email);
-		if (email == "quit")
+		if (!getline(cin, email) || email == "quit")
 			return 0;
 		User* u = udb.get_user_from_email(email);
-		if (u == nullptr)
+		if (u == nullptr) {
 			cout << "No user in the database has that email address." << endl;
-		else
-			cout << "Found " << u->get_full_name() << endl;
+			continue;
+		}
+		cout << "Found " << u->get_full_name() << endl;
 
 		vector<MovieAndRank> mandr = r.recommend_movies(email, 5);
 		for (int i = 0; i < mandr.size(); i++) {
-			cout << mandr[i].movie_id << endl;
-			cout << mandr[i].compatibility_score << endl;
+			const MovieAndRank& mr = mandr[i];
+			const Movie* m = mdb.get_movie_from_id(mr.movie_id);
+			cout << m->get_title() << ", id=" << m->get_id(), << ", score=" << mr.compatibility_score << endl;
 		}
 	}
 }
