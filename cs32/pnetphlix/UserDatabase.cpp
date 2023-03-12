@@ -9,7 +9,6 @@ using namespace std;
 UserDatabase::UserDatabase()
 {
     m_loaded = false;
-    // Replace this line with correct code.
 }
 
 UserDatabase::~UserDatabase()
@@ -60,7 +59,7 @@ bool UserDatabase::load(const string& filename)
     }
 
     m_loaded = true;
-    return m_loaded;  // Replace this line with correct code.
+    return m_loaded;
 }
 
 User* UserDatabase::get_user_from_email(const string& email) const
@@ -71,6 +70,6 @@ User* UserDatabase::get_user_from_email(const string& email) const
         return user;
     }
     else {
-        return nullptr;  // Replace this line with correct code.
+        return nullptr;
     }
 }

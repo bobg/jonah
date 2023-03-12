@@ -23,7 +23,6 @@ void addPoints(vector<MovieAndRank>& mandr, string mID, int points) {
 Recommender::Recommender(const UserDatabase& user_database,
                          const MovieDatabase& movie_database) : m_ud(user_database), m_md(movie_database)
 {
-    // Replace this line with correct code.
 }
 
 vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int movie_count) const
@@ -97,7 +96,7 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
         mandr.erase(mandr.begin() + movie_count, mandr.end());
     }
 
-    return mandr;  // Replace this line with correct code.
+    return mandr;
 }
 
 //===================================================================================

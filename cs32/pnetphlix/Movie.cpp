@@ -19,35 +19,35 @@ Movie::Movie(const string& id, const string& title, const string& release_year,
 
 string Movie::get_id() const
 {
-    return m_id;  // Replace this line with correct code.
+    return m_id;
 }
 
 string Movie::get_title() const
 {
-    return m_title;  // Replace this line with correct code.
+    return m_title;
 }
 
 string Movie::get_release_year() const
 {
-    return m_releaseYear;  // Replace this line with correct code.
+    return m_releaseYear;
 }
 
 float Movie::get_rating() const
 {
-    return m_rating;  // Replace this line with correct code.
+    return m_rating;
 }
 
 vector<string> Movie::get_directors() const
 {
-    return m_directors;  // Replace this line with correct code.
+    return m_directors;
 }
 
 vector<string> Movie::get_actors() const
 {
-    return m_actors;  // Replace this line with correct code.
+    return m_actors;
 }
 
 vector<string> Movie::get_genres() const
 {
-    return m_genres;  // Replace this line with correct code.
+    return m_genres;
 }
