@@ -35,7 +35,6 @@ MovieDatabase::~MovieDatabase()
 
 bool MovieDatabase::load(const string& filename)
 {
-    //cout << "begin movie load" << endl;
     ifstream infile(filename);
 
     if (m_loaded == true) {
@@ -91,7 +90,6 @@ bool MovieDatabase::load(const string& filename)
         }
     }
     m_loaded = true;
-    //cout << "end movie load" << endl;
     return m_loaded;
 }
 

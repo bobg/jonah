@@ -21,7 +21,6 @@ UserDatabase::~UserDatabase()
 
 bool UserDatabase::load(const string& filename)
 {
-    //cout << "begin user load" << endl;
     ifstream infile(filename);
 
     if (m_loaded == true) {
@@ -50,12 +49,10 @@ bool UserDatabase::load(const string& filename)
 
         User* user = new User(name, email, watchHistory);
 
-        //cout << email << endl;
         m_users.insert(email, user);
         m_death.push_back(user);
 
         string blank;
-        //cout << blank << endl;
         if (!getline(infile, blank)) {
             break;
         }
@@ -63,7 +60,6 @@ bool UserDatabase::load(const string& filename)
     }
 
     m_loaded = true;
-    //cout << "end user load" << endl;
     return m_loaded;  // Replace this line with correct code.
 }
 

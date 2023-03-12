@@ -10,7 +10,6 @@
 using namespace std;
 
 void isCompatible(vector<MovieAndRank>& mandr, string mID, int points) {
-    //cout << "in is compatible" << endl;
     for (int i = 0; i < mandr.size(); i++) {
         if (mandr[i].movie_id == mID) {
             mandr[i].compatibility_score += points;
@@ -29,17 +28,14 @@ Recommender::Recommender(const UserDatabase& user_database,
 
 vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int movie_count) const
 {
-    cout << "in recommend_movies function" << endl;
     vector<MovieAndRank> mandr;
 
     if (movie_count <= 0) {
-        cout << "movie count less than or equal to 0" << endl;
         return mandr;
     }
 
     User* user = m_ud.get_user_from_email(user_email);
     if (user == nullptr) {
-        cout << "invalid user" << endl;
         return mandr;
     }
     vector<string> watchHistory = user->get_watch_history();
@@ -76,7 +72,6 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
             if (watchHistory[j] == a.movie_id) {
                 i = mandr.erase(i);
                 erased = true;
-                cout << "removing duplicate" << endl;
                 break;
             }
         }
@@ -91,7 +86,6 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
         mandr.erase(mandr.begin() + movie_count, mandr.end());
     }
 
-    cout << "end of function" << endl;
     return mandr;  // Replace this line with correct code.
 }
 
