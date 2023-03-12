@@ -60,7 +60,7 @@ int main()
 		for (int i = 0; i < mandr.size(); i++) {
 			const MovieAndRank& mr = mandr[i];
 			const Movie* m = mdb.get_movie_from_id(mr.movie_id);
-			cout << m->get_title() << ", id=" << m->get_id(), << ", score=" << mr.compatibility_score << endl;
+			cout << m->get_title() << ", id=" << m->get_id() << ", score=" << mr.compatibility_score << endl;
 		}
 	}
 }
