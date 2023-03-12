@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-void isCompatible(vector<MovieAndRank>& mandr, string mID, int points) {
+void addPoints(vector<MovieAndRank>& mandr, string mID, int points) {
     for (int i = 0; i < mandr.size(); i++) {
         if (mandr[i].movie_id == mID) {
             mandr[i].compatibility_score += points;
@@ -40,27 +40,38 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
     }
     vector<string> watchHistory = user->get_watch_history();
     for (int i = 0; i < watchHistory.size(); i++) {
+        const string& movie_id = watchHistory[i];
+
         cout << "new i loop iteration at i = " << i << endl;
-        Movie* movie = m_md.get_movie_from_id(watchHistory[i]);
+        Movie* movie = m_md.get_movie_from_id(movie_id);
+
         vector<string> directors = movie->get_directors();
         for (int j = 0; j < directors.size(); j++) {
-            vector<Movie*> movie_from_director = m_md.get_movies_with_director(directors[j]);
-            for (int k = 0; k < movie_from_director.size(); k++) {
-                isCompatible(mandr, movie_from_director[k]->get_id(), 20);
+            const string& director = directors[j];
+
+            vector<Movie*> movies_from_director = m_md.get_movies_with_director(director);
+            for (int k = 0; k < movies_from_director.size(); k++) {
+                addPoints(mandr, movies_from_director[k]->get_id(), 20);
             }
         }
+
         vector<string> actors = movie->get_actors();
         for (int j = 0; j < actors.size(); j++) {
-            vector<Movie*> movie_from_actor = m_md.get_movies_with_actor(actors[j]);
-            for (int k = 0; k < movie_from_actor.size(); k++) {
-                isCompatible(mandr, movie_from_actor[k]->get_id(), 30);
+            const string& actor = actors[j];
+
+            vector<Movie*> movies_from_actor = m_md.get_movies_with_actor(actor);
+            for (int k = 0; k < movies_from_actor.size(); k++) {
+                addPoints(mandr, movies_from_actor[k]->get_id(), 30);
             }
         }
+
         vector<string> genres = movie->get_genres();
         for (int j = 0; j < genres.size(); j++) {
-            vector<Movie*> movie_from_genre = m_md.get_movies_with_genre(genres[j]);
-            for (int k = 0; k < movie_from_genre.size(); k++) {
-                isCompatible(mandr, movie_from_genre[k]->get_id(), 1);
+            const string& genre = genres[j];
+
+            vector<Movie*> movies_from_genre = m_md.get_movies_with_genre(genre);
+            for (int k = 0; k < movies_from_genre.size(); k++) {
+                addPoints(mandr, movies_from_genre[k]->get_id(), 1);
             }
         }
     }
