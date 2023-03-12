@@ -3,21 +3,24 @@
 #include "MovieDatabase.h"
 #include "User.h"
 #include "Movie.h"
+#include "treemm.h"
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 using namespace std;
 
-void addPoints(vector<MovieAndRank>& mandr, string mID, int points) {
-    for (int i = 0; i < mandr.size(); i++) {
-        if (mandr[i].movie_id == mID) {
-            mandr[i].compatibility_score += points;
-            return;
-        }
+void addPoints(vector<MovieAndRank>& mandr, TreeMultimap<string, int>& index, string mID, int points) {
+    TreeMultimap<string, int>::Iterator it = index.find(mID);
+    if (it.is_valid()) {
+        int pos = it.get_value();
+        MovieAndRank& mr = mandr[pos];
+        mr.compatibility_score += points;
+        return;
     }
+
+    index.insert(mID, mandr.size());
     mandr.push_back(MovieAndRank(mID, points));
-    return;
 }
 
 Recommender::Recommender(const UserDatabase& user_database,
@@ -37,6 +40,9 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
     if (user == nullptr) {
         return mandr;
     }
+
+    TreeMultimap<string, int> index;
+
     vector<string> watchHistory = user->get_watch_history();
     for (int i = 0; i < watchHistory.size(); i++) {
         const string& movie_id = watchHistory[i];
@@ -61,7 +67,7 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
 
             vector<Movie*> movies_from_director = m_md.get_movies_with_director(director);
             for (int k = 0; k < movies_from_director.size(); k++) {
-                addPoints(mandr, movies_from_director[k]->get_id(), 20);
+                addPoints(mandr, index, movies_from_director[k]->get_id(), 20);
             }
         }
 
@@ -82,7 +88,7 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
 
             vector<Movie*> movies_from_actor = m_md.get_movies_with_actor(actor);
             for (int k = 0; k < movies_from_actor.size(); k++) {
-                addPoints(mandr, movies_from_actor[k]->get_id(), 30);
+                addPoints(mandr, index, movies_from_actor[k]->get_id(), 30);
             }
         }
 
@@ -103,7 +109,7 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
 
             vector<Movie*> movies_from_genre = m_md.get_movies_with_genre(genre);
             for (int k = 0; k < movies_from_genre.size(); k++) {
-                addPoints(mandr, movies_from_genre[k]->get_id(), 1);
+                addPoints(mandr, index, movies_from_genre[k]->get_id(), 1);
             }
         }
     }
