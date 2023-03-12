@@ -16,7 +16,6 @@ class TreeMultimap
         {
             m_withVector = false;
             m_it = m_end;
-            // Replace this line with correct code.
         }
 
         Iterator(vector<ValueType>& v) {
@@ -28,7 +27,6 @@ class TreeMultimap
         ValueType& get_value() const
         {
             return *m_it;
-            //throw 1;  // Replace this line with correct code.
         }
 
         bool is_valid() const
@@ -48,7 +46,6 @@ class TreeMultimap
         void advance()
         {
             m_it++;
-            // Replace this line with correct code.
         }
 
       private:
@@ -60,13 +57,11 @@ class TreeMultimap
     TreeMultimap()
     {
         m_root = nullptr;
-        // Replace this line with correct code.
     }
 
     ~TreeMultimap()
     {
         delete_helper(m_root);
-        // Replace this line with correct code.
     }
 
     void insert(const KeyType& key, const ValueType& value)
@@ -88,7 +83,6 @@ class TreeMultimap
         else {
             insert_node->m_right = new Node(key, value);
         }
-        // Replace this line with correct code.
     }
 
     Iterator find(const KeyType& key) const
@@ -105,7 +99,7 @@ class TreeMultimap
             it = Iterator(cur->m_values);
         }
 
-        return it;  // Replace this line with correct code.
+        return it;
     }
 
   private:

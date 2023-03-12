@@ -28,7 +28,7 @@ class Recommender
   private:
       const UserDatabase& m_ud;
       const MovieDatabase& m_md;
-      bool compare(MovieAndRank i, MovieAndRank j);
+
       class Comparer {
       public:
           Comparer(const MovieDatabase& mdb) : m_md(mdb) {}
