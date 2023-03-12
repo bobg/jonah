@@ -48,6 +48,17 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
         for (int j = 0; j < directors.size(); j++) {
             const string& director = directors[j];
 
+            bool seen = false;
+            for (int jj = 0; jj < j; jj++) {
+              if (director == directors[jj]) {
+                seen = true;
+                break;
+              }
+            }
+            if (seen) {
+              continue;
+            }
+
             vector<Movie*> movies_from_director = m_md.get_movies_with_director(director);
             for (int k = 0; k < movies_from_director.size(); k++) {
                 addPoints(mandr, movies_from_director[k]->get_id(), 20);
@@ -58,6 +69,17 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
         for (int j = 0; j < actors.size(); j++) {
             const string& actor = actors[j];
 
+            bool seen = false;
+            for (int jj = 0; jj < j; jj++) {
+              if (actor == actors[jj]) {
+                seen = true;
+                break;
+              }
+            }
+            if (seen) {
+              continue;
+            }
+
             vector<Movie*> movies_from_actor = m_md.get_movies_with_actor(actor);
             for (int k = 0; k < movies_from_actor.size(); k++) {
                 addPoints(mandr, movies_from_actor[k]->get_id(), 30);
@@ -67,6 +89,17 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
         vector<string> genres = movie->get_genres();
         for (int j = 0; j < genres.size(); j++) {
             const string& genre = genres[j];
+
+            bool seen = false;
+            for (int jj = 0; jj < j; jj++) {
+              if (genre == genres[jj]) {
+                seen = true;
+                break;
+              }
+            }
+            if (seen) {
+              continue;
+            }
 
             vector<Movie*> movies_from_genre = m_md.get_movies_with_genre(genre);
             for (int k = 0; k < movies_from_genre.size(); k++) {
