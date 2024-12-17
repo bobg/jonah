@@ -3,68 +3,113 @@
 #include "MovieDatabase.h"
 #include "User.h"
 #include "Movie.h"
+#include "treemm.h"
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 using namespace std;
 
-void isCompatible(vector<MovieAndRank>& mandr, string mID, int points) {
-    //cout << "in is compatible" << endl;
-    for (int i = 0; i < mandr.size(); i++) {
-        if (mandr[i].movie_id == mID) {
-            mandr[i].compatibility_score += points;
-            return;
-        }
+void addPoints(vector<MovieAndRank>& mandr, TreeMultimap<string, int>& index, string mID, int points) {
+    TreeMultimap<string, int>::Iterator it = index.find(mID);
+    if (it.is_valid()) {
+        int pos = it.get_value();
+        MovieAndRank& mr = mandr[pos];
+        mr.compatibility_score += points;
+        return;
     }
+
+    index.insert(mID, mandr.size());
     mandr.push_back(MovieAndRank(mID, points));
-    return;
 }
 
 Recommender::Recommender(const UserDatabase& user_database,
                          const MovieDatabase& movie_database) : m_ud(user_database), m_md(movie_database)
 {
-    // Replace this line with correct code.
 }
 
 vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int movie_count) const
 {
-    cout << "in recommend_movies function" << endl;
     vector<MovieAndRank> mandr;
 
     if (movie_count <= 0) {
-        cout << "movie count less than or equal to 0" << endl;
         return mandr;
     }
 
     User* user = m_ud.get_user_from_email(user_email);
     if (user == nullptr) {
-        cout << "invalid user" << endl;
         return mandr;
     }
+
+    TreeMultimap<string, int> index;
+
     vector<string> watchHistory = user->get_watch_history();
     for (int i = 0; i < watchHistory.size(); i++) {
+        const string& movie_id = watchHistory[i];
+
         cout << "new i loop iteration at i = " << i << endl;
-        Movie* movie = m_md.get_movie_from_id(watchHistory[i]);
+        Movie* movie = m_md.get_movie_from_id(movie_id);
+
         vector<string> directors = movie->get_directors();
         for (int j = 0; j < directors.size(); j++) {
-            vector<Movie*> movie_from_director = m_md.get_movies_with_director(directors[j]);
-            for (int k = 0; k < movie_from_director.size(); k++) {
-                isCompatible(mandr, movie_from_director[k]->get_id(), 20);
+            const string& director = directors[j];
+
+            bool seen = false;
+            for (int jj = 0; jj < j; jj++) {
+              if (director == directors[jj]) {
+                seen = true;
+                break;
+              }
+            }
+            if (seen) {
+              continue;
+            }
+
+            vector<Movie*> movies_from_director = m_md.get_movies_with_director(director);
+            for (int k = 0; k < movies_from_director.size(); k++) {
+                addPoints(mandr, index, movies_from_director[k]->get_id(), 20);
             }
         }
+
         vector<string> actors = movie->get_actors();
         for (int j = 0; j < actors.size(); j++) {
-            vector<Movie*> movie_from_actor = m_md.get_movies_with_actor(actors[j]);
-            for (int k = 0; k < movie_from_actor.size(); k++) {
-                isCompatible(mandr, movie_from_actor[k]->get_id(), 30);
+            const string& actor = actors[j];
+
+            bool seen = false;
+            for (int jj = 0; jj < j; jj++) {
+              if (actor == actors[jj]) {
+                seen = true;
+                break;
+              }
+            }
+            if (seen) {
+              continue;
+            }
+
+            vector<Movie*> movies_from_actor = m_md.get_movies_with_actor(actor);
+            for (int k = 0; k < movies_from_actor.size(); k++) {
+                addPoints(mandr, index, movies_from_actor[k]->get_id(), 30);
             }
         }
+
         vector<string> genres = movie->get_genres();
         for (int j = 0; j < genres.size(); j++) {
-            vector<Movie*> movie_from_genre = m_md.get_movies_with_genre(genres[j]);
-            for (int k = 0; k < movie_from_genre.size(); k++) {
-                isCompatible(mandr, movie_from_genre[k]->get_id(), 1);
+            const string& genre = genres[j];
+
+            bool seen = false;
+            for (int jj = 0; jj < j; jj++) {
+              if (genre == genres[jj]) {
+                seen = true;
+                break;
+              }
+            }
+            if (seen) {
+              continue;
+            }
+
+            vector<Movie*> movies_from_genre = m_md.get_movies_with_genre(genre);
+            for (int k = 0; k < movies_from_genre.size(); k++) {
+                addPoints(mandr, index, movies_from_genre[k]->get_id(), 1);
             }
         }
     }
@@ -76,7 +121,6 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
             if (watchHistory[j] == a.movie_id) {
                 i = mandr.erase(i);
                 erased = true;
-                cout << "removing duplicate" << endl;
                 break;
             }
         }
@@ -91,8 +135,7 @@ vector<MovieAndRank> Recommender::recommend_movies(const string& user_email, int
         mandr.erase(mandr.begin() + movie_count, mandr.end());
     }
 
-    cout << "end of function" << endl;
-    return mandr;  // Replace this line with correct code.
+    return mandr;
 }
 
 //===================================================================================

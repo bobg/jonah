@@ -23,7 +23,6 @@ vector<string> split(string s) {
 MovieDatabase::MovieDatabase()
 {
     m_loaded = false;
-    // Replace this line with correct code.
 }
 
 MovieDatabase::~MovieDatabase()
@@ -35,7 +34,6 @@ MovieDatabase::~MovieDatabase()
 
 bool MovieDatabase::load(const string& filename)
 {
-    //cout << "begin movie load" << endl;
     ifstream infile(filename);
 
     if (m_loaded == true) {
@@ -91,7 +89,6 @@ bool MovieDatabase::load(const string& filename)
         }
     }
     m_loaded = true;
-    //cout << "end movie load" << endl;
     return m_loaded;
 }
 
@@ -103,7 +100,7 @@ Movie* MovieDatabase::get_movie_from_id(const string& id) const
         return movie;
     }
     else {
-        return nullptr;  // Replace this line with correct code.
+        return nullptr;
     }
 }
 
@@ -116,7 +113,7 @@ vector<Movie*> MovieDatabase::get_movies_with_director(const string& director) c
         result.push_back(movie);
         it.advance();
     }
-    return result;  // Replace this line with correct code.
+    return result;
 }
 
 vector<Movie*> MovieDatabase::get_movies_with_actor(const string& actor) const
@@ -128,7 +125,7 @@ vector<Movie*> MovieDatabase::get_movies_with_actor(const string& actor) const
         result.push_back(movie);
         it.advance();
     }
-    return result;  // Replace this line with correct code.
+    return result;
 }
 
 vector<Movie*> MovieDatabase::get_movies_with_genre(const string& genre) const
@@ -140,5 +137,5 @@ vector<Movie*> MovieDatabase::get_movies_with_genre(const string& genre) const
         result.push_back(movie);
         it.advance();
     }
-    return result;  // Replace this line with correct code.
+    return result;
 }
